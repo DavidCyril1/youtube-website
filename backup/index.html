@@ -1307,7 +1307,7 @@
     </div>
 
     <div class="footer">
-        <p>© 2025 YouTube Downloader | Developed with <i class="fas fa-heart" style="color: var(--primary-color);"></i> by <a href="https://www.whatsapp.com/channel/0029VaeRru3ADTOEKPCPom0L" class="creator">David Cyril</a></p>
+        <p>© 2025 Ultimate YouTube Downloader | Developed with <i class="fas fa-heart" style="color: var(--primary-color);"></i> by <a href="https://www.whatsapp.com/channel/0029VaeRru3ADTOEKPCPom0L" class="creator">David Cyril</a></p>
         <div class="social-links">
             <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
@@ -1450,21 +1450,26 @@
                     
                     if (data.success) {
                         // Display results
-                        videoThumbnail.src = data.result.image;
+                        videoThumbnail.src = data.result.thumbnail || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
                         videoTitle.textContent = data.result.title;
-                        downloadLink.href = data.result.downloadUrl;
+                        downloadLink.href = data.result.download_url;
                         
                         // Set metadata (simulated for demo)
-                        durationText.textContent = formatDuration(data.result.duration || 180);
-                        viewsText.textContent = formatViews(data.result.views || 10000);
+                        durationText.textContent = formatDuration(Math.floor(Math.random() * 300) + 60); // Random duration 1-6 mins
+                        viewsText.textContent = formatViews(Math.floor(Math.random() * 1000000) + 1000); // Random views
                         channelText.textContent = data.result.channel || 'Unknown Artist';
+                        
+                        // Set download filename
+                        const filename = data.result.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                        downloadLink.download = `${filename}.mp3`;
                         
                         // Add to history
                         addToHistory({
                             id: videoId,
                             title: data.result.title,
-                            thumbnail: data.result.image,
+                            thumbnail: data.result.thumbnail || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
                             type: 'audio',
+                            quality: '128kbps',
                             date: new Date().toISOString()
                         });
                     } else {
@@ -1477,7 +1482,7 @@
                     
                     if (data.success) {
                         // Display results
-                        videoThumbnail.src = data.result.thumbnail;
+                        videoThumbnail.src = data.result.thumbnail || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
                         videoTitle.textContent = data.result.title;
                         
                         // Set quality-based download link (simulated for demo)
@@ -1499,16 +1504,20 @@
                         downloadLink.href = downloadUrl;
                         
                         // Set metadata (simulated for demo)
-                        durationText.textContent = formatDuration(data.result.duration || 240);
-                        viewsText.textContent = formatViews(data.result.views || 50000);
+                        durationText.textContent = formatDuration(data.result.duration || Math.floor(Math.random() * 600) + 60);
+                        viewsText.textContent = formatViews(data.result.views || Math.floor(Math.random() * 10000000) + 1000);
                         channelText.textContent = data.result.channel || 'Unknown Channel';
                         watchLink.href = youtubeUrl;
+                        
+                        // Set download filename
+                        const filename = data.result.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                        downloadLink.download = `${filename}.mp4`;
                         
                         // Add to history
                         addToHistory({
                             id: videoId,
                             title: data.result.title,
-                            thumbnail: data.result.thumbnail,
+                            thumbnail: data.result.thumbnail || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
                             type: 'video',
                             quality: currentQuality,
                             date: new Date().toISOString()
